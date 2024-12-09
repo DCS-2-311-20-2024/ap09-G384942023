@@ -231,17 +231,7 @@ function init() {
   scene.add(stands_1);
 
   const stands_2 = new THREE.Group();
-  /*
-  const stand_2_1=new THREE.Mesh(standGeometry,standMaterial);
-  stand_2_1.position.set(0,-0.5,-5.74);
-  stands_2.add(stand_2_1);
-  const stand_2_2=new THREE.Mesh(standGeometry,standMaterial);
-  stand_2_2.position.set(6,-3,-5.74);
-  stands_2.add(stand_2_2);
-  const stand_2_3=new THREE.Mesh(standGeometry,standMaterial);
-  stand_2_3.position.set(-6,-3,-5.74);
-  stands_2.add(stand_2_3);
-  */
+  
   for (let i = 0; i < 5; i++) {
     const p = (i/8) * Math.PI * 2;
     const x = 10 * Math.cos(p);
