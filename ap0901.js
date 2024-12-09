@@ -13,7 +13,7 @@ import { GUI } from "ili-gui";
 function init() {
   // 制御変数の定義
   const param = {
-    axes: true, // 座標軸
+    axes: false, // 座標軸
   };
   
   // シーン作成
@@ -28,23 +28,56 @@ function init() {
   scene.add(axes);
   
   // レンダラの設定
+  // 第1のレンダラ
+  const nameHeight = document.getElementById("output1").clientHeight;
   const renderer = new THREE.WebGLRenderer();
-  renderer.shadowMap.enabled = true;
-  renderer.setSize(window.innerWidth, innerHeight);
-    document.getElementById("output").appendChild(renderer.domElement);
-
+  {
+    renderer.setClearColor(0x204060);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(
+      0.7*window.innerWidth,
+      0.5*window.innerWidth);
+    renderer.domElement.style.position = "absolute";
+    renderer.domElement.style.zIndex = 1;
+    renderer.domElement.style.top = nameHeight;
+  }
+  // 第2のレンダラ
+  const renderer2 = new THREE.WebGLRenderer();
+  {
+    renderer2.setClearColor(0x204060);
+    renderer2.setPixelRatio(window.devicePixelRatio);
+    renderer2.setSize(
+      0.3*window.innerWidth,
+      0.6*window.innerWidth);
+    renderer2.domElement.style.position = "absolute";
+    renderer2.domElement.style.zIndex = 1;
+    renderer2.domElement.style.top = nameHeight;
+  }
 
   // カメラの作成
   const camera = new THREE.PerspectiveCamera(
     50, window.innerWidth/window.innerHeight, 0.1, 1000);
   camera.position.set(0,10,20);
   camera.lookAt(0,-5,-10);
+  // 第2のカメラ
+  const camera2 = new THREE.PerspectiveCamera(
+    100, 1/2, 0.1, 1000);
+    {
+    camera2.position.set(0,15,5);
+    camera2.lookAt(0,0,-10);
+    }
 
   // カメラ制御
   const orbitControls = new OrbitControls(camera, renderer.domElement);
   orbitControls.enableDumping = true;
+  orbitControls.target.set(0, -2, -20);
   //orbitControls.minAzimuthAngle = -Math.PI/2;
   //orbitControls.maxAzimuthAngle = Math.PI/2;
+  const orbitControls2 = new OrbitControls(camera2, renderer2.domElement);
+  orbitControls2.enableDumping = true;
+  //orbitControls2.target.set(0, 0, -10);
+  //orbitControls2.minAzimuthAngle = -Math.PI/2;
+  //orbitControls2.maxAzimuthAngle = Math.PI/2;
 
   //光
   const dirLight = new THREE.DirectionalLight(0xffffff, 5);
@@ -158,59 +191,85 @@ function init() {
     }
     return dummy;
   }
-  const avatars=new THREE.Group;
+  const as=new THREE.Group;
 
-  const avatar = makeDummy("red");
-  avatar.scale.set(2.5, 3.5, 2.5);
-  avatar.position.set(3,-6,-7);
-  avatars.add(avatar);
-  const avatar2 = makeDummy("red");
-  avatar2.scale.set(2, 3, 2);
-  avatar2.position.set(5,-6,-7);
-  avatars.add(avatar2);
-  const avatar3 = makeDummy("red");
-  avatar3.scale.set(2.5, 3.5, 2.5);
-  avatar3.position.set(-7,-6,-7);
-  avatars.add(avatar3);
-  const avatar4 = makeDummy("red");
-  avatar4.scale.set(3, 4, 3);
-  avatar4.position.set(4,-3.5,1.5);
-  avatars.add(avatar4);
-  const avatar5 = makeDummy("red");
-  avatar5.scale.set(3, 4, 3);
-  avatar5.position.set(-2,-3.5,0.7);
-  avatars.add(avatar5);
+  const a = makeDummy("red");
+  a.scale.set(2.5, 3.5, 2.5);
+  a.position.set(3,-6,-7);
+  as.add(a);
+  const a2 = makeDummy("red");
+  a2.scale.set(2, 3, 2);
+  a2.position.set(5,-6,-7);
+  as.add(a2);
+  const a3 = makeDummy("red");
+  a3.scale.set(2.5, 3.5, 2.5);
+  a3.position.set(-7,-6,-7);
+  as.add(a3);
+  const a4 = makeDummy("red");
+  a4.scale.set(3, 4, 3);
+  a4.position.set(4,-3.5,1.5);
+  as.add(a4);
+  const a5 = makeDummy("red");
+  a5.scale.set(3, 4, 3);
+  a5.position.set(-2,-3.5,0.7);
+  as.add(a5);
 
-  scene.add(avatars);
+  scene.add(as);
 
   //立ち位置
   
-  const stands = new THREE.Group();
+  const stands_1 = new THREE.Group();
   const standGeometry=new THREE.PlaneGeometry(1,1);
   const standMaterial=new THREE.MeshBasicMaterial({color : 'white'});
-  const stand_1=new THREE.Mesh(standGeometry,standMaterial);
-  stand_1.position.set(0,-0.5,-5.74);
-  stands.add(stand_1);
-  stands.rotation.x=-Math.PI/2;
-  scene.add(stands);
-  // 自分の生成
+
+  for(let r=-2;r<3;r++){
+    const stand=new THREE.Mesh(standGeometry,standMaterial);
+    stand.position.set(r*5,7,-7.98);
+    stands_1.add(stand);
+  }
+  stands_1.rotation.x=-Math.PI/2;
+  scene.add(stands_1);
+
+  const stands_2 = new THREE.Group();
   /*
-  const me = makeDummy("white");
+  const stand_2_1=new THREE.Mesh(standGeometry,standMaterial);
+  stand_2_1.position.set(0,-0.5,-5.74);
+  stands_2.add(stand_2_1);
+  const stand_2_2=new THREE.Mesh(standGeometry,standMaterial);
+  stand_2_2.position.set(6,-3,-5.74);
+  stands_2.add(stand_2_2);
+  const stand_2_3=new THREE.Mesh(standGeometry,standMaterial);
+  stand_2_3.position.set(-6,-3,-5.74);
+  stands_2.add(stand_2_3);
+  */
+  for (let i = 0; i < 5; i++) {
+    const p = (i/8) * Math.PI * 2;
+    const x = 10 * Math.cos(p);
+    const z = 10 * Math.sin(p);
+    const stand_2 = new THREE.Mesh(standGeometry,standMaterial);
+    stand_2.position.set(x, z-10, -5.74);
+    //stand_2.rotation.y = -p;
+    stands_2.add(stand_2);
+  }
+  stands_2.rotation.x=-Math.PI/2;
+  scene.add(stands_2);
+  // 自分の生成
+  const avatar = makeDummy("white");
   setAvatar(
     new THREE.Vector3(0,
-      3*param.gapY-2,
-      3*(param.d+param.gapZ)+5)
-    )
-  scene.add(me);
+      -3,
+      0)
+    );
+  avatar.scale.set(3, 4, 3);
+  scene.add(avatar);
 
   // 自分の移動
   function setAvatar(position){
-    me.position.copy(position);
-    me.position.y += 0.85;
-    camera.position.copy(me.position);
-    camera.lookAt(0,0,0);
+    avatar.position.copy(position);
+    camera.position.set(avatar.position.x,avatar.position.y,avatar.position.z);
+    //camera.lookAt(0,-10,-20);
     camera.updateProjectionMatrix();
-  }*/
+  }
 
   // シート選択のための設定
   const raycaster = new THREE.Raycaster();
@@ -223,14 +282,24 @@ function init() {
     }
     mouse.y = -(event.clientY / (window.innerWidth*0.6)) * 2 + 1;
     // 光線を発射
-    raycaster.setFromCamera(mouse, camera);
+    raycaster.setFromCamera(mouse, camera2);
     // 全ての座席について
-    stands.children.forEach((stand) => {
+    stands_1.children.forEach((stand) => {
       //マウスが指しているか確認
       const intersects = raycaster.intersectObject(stand, true);
       if( intersects.length > 0) {
         //指していたら、　その位置にマーカを設置
-        setAvatar(intersects[0].object.parent.position);
+        const position = new THREE.Vector3(stand.position.x, stand.position.y-12.5, stand.position.z+1);
+        setAvatar(position);
+      }
+    });
+    stands_2.children.forEach((stand_2) => {
+      //マウスが指しているか確認
+      const intersects_2 = raycaster.intersectObject(stand_2, true);
+      if( intersects_2.length > 0) {
+        //指していたら、　その位置にマーカを設置
+        const position_2 = new THREE.Vector3(stand_2.position.x, -3, -stand_2.position.y);
+        setAvatar(position_2);
       }
     });
   }
@@ -419,6 +488,19 @@ function animateFish2() {
 //旋回する魚群
 const fishs3=new THREE.Group;
 
+  // レンダラーの配置
+  document.getElementById("output1").appendChild(renderer.domElement);
+  document.getElementById("output2").appendChild(renderer2.domElement);
+
+  // Windowサイズの変更処理
+  window.addEventListener("resize", ()=>{
+    camera.updateProjectionMatrix();
+    camera2.updateProjectionMatrix();
+    renderer.setSize(0.7*window.innerWidth, 0.5*window.innerWidth);
+    renderer2.setSize(0.3*window.innerWidth, 0.6*window.innerWidth);
+  }, false);
+
+//scene.position.z=20;
   // 描画関数
   function render() {
     // 座標軸の表示
@@ -429,6 +511,7 @@ const fishs3=new THREE.Group;
     animateFish2();
 
     renderer.render(scene, camera);
+    renderer2.render(scene, camera2);
 
     requestAnimationFrame(render);
   }
