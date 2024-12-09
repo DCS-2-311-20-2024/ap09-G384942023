@@ -371,7 +371,7 @@ const rockMaterial_1 = new THREE.MeshLambertMaterial({color:'white',side: THREE.
 rockMaterial_1.color.setRGB(0.53, 0.53, 0.53);
 const rock1 = new THREE.Mesh(rockGeometry_1, rockMaterial_1);
 rock1.scale.set(2, 2, 2); 
-rock1.position.set(10, 0, -20); 
+rock1.position.set(10, 0, -20.1); 
 
 rock.add(rock1);
 
