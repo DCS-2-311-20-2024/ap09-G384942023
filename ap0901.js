@@ -238,7 +238,6 @@ function init() {
     const z = 10 * Math.sin(p);
     const stand_2 = new THREE.Mesh(standGeometry,standMaterial);
     stand_2.position.set(x, z-10, -5.74);
-    //stand_2.rotation.y = -p;
     stands_2.add(stand_2);
   }
   stands_2.rotation.x=-Math.PI/2;
@@ -261,33 +260,27 @@ function init() {
     camera.updateProjectionMatrix();
   }
 
-  // シート選択のための設定
+  //立ち位置選択
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
   function onMouseDown(event) {
-    // マウスの位置を±1の範囲に変換
     mouse.x = (event.clientX / window.innerWidth - 0.7) * 20 / 3 - 1;
     if (mouse.x < -1) {
       mouse.x = -1;
     }
     mouse.y = -(event.clientY / (window.innerWidth*0.6)) * 2 + 1;
-    // 光線を発射
+    
     raycaster.setFromCamera(mouse, camera2);
-    // 全ての座席について
     stands_1.children.forEach((stand) => {
-      //マウスが指しているか確認
       const intersects = raycaster.intersectObject(stand, true);
       if( intersects.length > 0) {
-        //指していたら、　その位置にマーカを設置
         const position = new THREE.Vector3(stand.position.x, stand.position.y-12.5, stand.position.z+1);
         setAvatar(position);
       }
     });
     stands_2.children.forEach((stand_2) => {
-      //マウスが指しているか確認
       const intersects_2 = raycaster.intersectObject(stand_2, true);
       if( intersects_2.length > 0) {
-        //指していたら、　その位置にマーカを設置
         const position_2 = new THREE.Vector3(stand_2.position.x, -3, -stand_2.position.y);
         setAvatar(position_2);
       }
@@ -446,7 +439,7 @@ for(let i=-2;i<3;i++){
 };
 fishs1.position.z = -20;
 scene.add(fishs1);
-// 魚のアニメーション関数
+// 魚のアニメーション１
 function animateFish() {
   fishs1.position.x -= 0.06;
   if (fishs1.position.x < -40) {
@@ -466,17 +459,14 @@ for(let i=-5;i<6;i++){
 };
 fishs2.position.z = -8.1;
 scene.add(fishs2);
-// 魚のアニメーション
+// 魚のアニメーション２
 function animateFish2() {
   fishs2.position.x -= 0.1;
   if (fishs2.position.x < -20) {
     fishs2.position.x = 20;
-    fishs2.scale.setScalar(0.5); // 大きさをランダムに変更
+    fishs2.scale.setScalar(0.5);
   }
 }
-
-//旋回する魚群
-const fishs3=new THREE.Group;
 
   // レンダラーの配置
   document.getElementById("output1").appendChild(renderer.domElement);
